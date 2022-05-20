@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        div {
+            margin: 0 auto;
+            width: 400px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td,
+        th {
+            border: 1px solid black;
+            text-align: center;
+        }
+        h3{
+            text-align: center;
+        }
+        input{
+            margin-bottom: 5px
+        }
+        .hiden{
+            color: white;
+        }
+    </style>
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <h3>Daftar Gaji Pegawai</h3>
+        <p><a href="{% url 'create' %}">create</a></p>
+        
+        <input type="text" placeholder="search..">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Gaji</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% load humanize %}
+                {% for g in gaji %}
+                
+                <tr>
+                    <td>{{g.nama}}</td>
+                    <td class="rupiah" >Rp. {{g.gaji|intcomma}},00</td>
+                </tr>
+                
+                {% endfor %}
+                <tr>
+                    <td class="hiden">'</td>
+                    <td class="hiden">'</td>
+                </tr>
+                <tr>
+                    <td>Jumlah</td>
+                    <td id="jumlah"></td>
+                </tr>
+             
+            </tbody>
+        </table>
+        
+    </div>
+    
+ 
+    <script>
+        const values = [...document.querySelectorAll('.rupiah')]
+        .map(element => element.innerText.replace('Rp. ', '').replace('.', '').replace(',00', '')) 
+
+        total = 0
+        for(i = 0; i <values.length; i++){ 
+            
+            total += Number(values[i]);
+        }
+
+        console.log(total)  
+        let bil = total.toString()
+
+        let reverse = bil.toString().split('').reverse().join('')
+        let ribuan 	= reverse.match(/\d{1,3}/g);
+        let bil_ribuan	= ribuan.join('.').split('').reverse().join('');   
+        console.log(bil_ribuan)  
+
+        document.getElementById("jumlah").innerHTML = "Rp. " + bil_ribuan + ",00";
+
+    </script>
+</body>
+
+</html>
